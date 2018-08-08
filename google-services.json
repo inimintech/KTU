@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1008033173303",
+    "firebase_url": "https://ktuproject-472d1.firebaseio.com",
+    "project_id": "ktuproject-472d1",
+    "storage_bucket": "ktuproject-472d1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008033173303:android:617db997db9e3c78",
+        "android_client_info": {
+          "package_name": "com.inimintech.ktu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1008033173303-r6g1r45qh7gnppfcuhb64stlgqqbbkal.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWGOPmSNdIwObJWlc3103tEcoovV1WysQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
