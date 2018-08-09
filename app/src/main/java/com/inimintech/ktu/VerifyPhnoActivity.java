@@ -21,7 +21,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.util.concurrent.TimeUnit;
 
-class VerifyPhnoActivity extends AppCompatActivity {
+public class VerifyPhnoActivity extends AppCompatActivity {
 
     private String mVerificationId;
 
