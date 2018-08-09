@@ -104,12 +104,12 @@ class VerifyPhnoActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             String user = mAuth.getUid();
-                           /* Intent intent = new Intent(VerifyPhnoActivity.this, ChatActivity.class);
+                            Intent intent = new Intent(VerifyPhnoActivity.this, ChatActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             Bundle bundle= new Bundle();
                             bundle.putString("UID", user);
                             intent.putExtras(bundle);
-                            startActivity(intent);*/
+                            startActivity(intent);
 
                         } else {
                             String message = "Somthing is wrong, we will fix it soon...";
