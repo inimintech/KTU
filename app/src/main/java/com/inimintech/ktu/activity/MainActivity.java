@@ -3,33 +3,45 @@ package com.inimintech.ktu.activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.inimintech.ktu.R;
+import com.inimintech.ktu.fragments.ChatFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
 
     private BottomNavigationView.OnNavigationItemSelectedListener
-            mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+            mOnNavigationItemSelectedListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
-                    return true;
+                    transaction.replace(R.id.container_main, ChatFragment.newInstance());
+                    break;
                 case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
-                    return true;
+                    transaction.replace(R.id.container_main, ChatFragment.newInstance());
+                    break;
                 case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
-                    return true;
+                    transaction.replace(R.id.container_main, ChatFragment.newInstance());
+                    break;
             }
-            return false;
+            transaction.commit();
+            return true;
+            //Manually displaying the first fragment - one time only
+
+
+
+
+            //Used to select an item programmatically
+            //bottomNavigationView.getMenu().getItem(2).setChecked(true);
         }
     };
 

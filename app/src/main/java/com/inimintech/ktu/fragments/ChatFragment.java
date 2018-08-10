@@ -45,6 +45,11 @@ public class ChatFragment extends Fragment {
         return fragment;
     }
 
+    public static ChatFragment newInstance() {
+        ChatFragment fragment = new ChatFragment();
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
