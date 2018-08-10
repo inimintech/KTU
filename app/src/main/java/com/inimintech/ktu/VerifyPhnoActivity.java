@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.inimintech.ktu.activity.MainActivity;
 
 import java.util.concurrent.TimeUnit;
 
@@ -50,8 +51,6 @@ public class VerifyPhnoActivity extends AppCompatActivity {
                     editTextCode.requestFocus();
                     return;
                 }
-
-                //verifying the code entered manually
                 verifyVerificationCode(code);
             }
         });
@@ -104,7 +103,7 @@ public class VerifyPhnoActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             String user = mAuth.getUid();
-                            Intent intent = new Intent(VerifyPhnoActivity.this, ChatActivity.class);
+                            Intent intent = new Intent(VerifyPhnoActivity.this, MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             Bundle bundle= new Bundle();
                             bundle.putString("UID", user);
