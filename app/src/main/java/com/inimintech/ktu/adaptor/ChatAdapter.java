@@ -13,6 +13,8 @@ import com.inimintech.ktu.R;
 import com.inimintech.ktu.data.Chat;
 import com.inimintech.ktu.services.AuthServices;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -74,7 +76,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         TextView textView = viewHolder.msg;
         textView.setText(chat.getMessage());
         TextView textView1 = viewHolder.msgTime;
-        textView1.setText(String.valueOf(new Date(chat.getSentTime())));
+        DateFormat time = new SimpleDateFormat("hh:mm a");
+        textView1.setText(String.valueOf(time.format(new Date(chat.getSentTime()))));
     }
 
     @Override
