@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.inimintech.ktu.R;
 import com.inimintech.ktu.data.Chat;
+import com.inimintech.ktu.services.AuthServices;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,16 +37,33 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         mChats.add(chat);
     }
 
+    private static final int VIEW_TYPE_MESSAGE_SENT = 1;
+    private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
+
+    @Override
+    public int getItemViewType(int position) {
+        Chat message = mChats.get(position);
+        if (message.getUserId().equals(AuthServices.UID)) {
+            return VIEW_TYPE_MESSAGE_SENT;
+        } else {
+            return VIEW_TYPE_MESSAGE_RECEIVED;
+        }
+    }
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-
-        View contactView = inflater.inflate(R.layout.item_chat, parent, false);
-
-        ViewHolder viewHolder = new ViewHolder(contactView);
-        return viewHolder;
+        if(viewType == VIEW_TYPE_MESSAGE_SENT) {
+            View contactView = inflater.inflate(R.layout.item_chat, parent, false);
+            ViewHolder viewHolder = new ViewHolder(contactView);
+            return viewHolder;
+        }else if(viewType == VIEW_TYPE_MESSAGE_RECEIVED) {
+            View contactView = inflater.inflate(R.layout.item_recieved, parent, false);
+            ViewHolder viewHolder = new ViewHolder(contactView);
+            return viewHolder;
+        }
+        return null;
     }
 
     @Override
@@ -70,6 +88,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         public TextView msgTime;
 
         public ViewHolder(View itemView) {
+            super(itemView);
+
+            msg = (TextView) itemView.findViewById(R.id.text_message_body);
+            msgTime = (TextView) itemView.findViewById(R.id.text_message_time);
+        }
+    }
+
+    public class RecViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView msg;
+        public TextView msgTime;
+
+        public RecViewHolder(View itemView) {
             super(itemView);
 
             msg = (TextView) itemView.findViewById(R.id.text_message_body);
