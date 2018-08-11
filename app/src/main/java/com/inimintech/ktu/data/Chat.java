@@ -2,7 +2,6 @@ package com.inimintech.ktu.data;
 
 import android.text.TextUtils;
 
-
 /*
  * @author      Bathire Nathan
  * @Created on  11 Aug 2018
