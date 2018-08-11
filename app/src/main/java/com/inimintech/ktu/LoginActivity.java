@@ -36,9 +36,6 @@ public class LoginActivity extends AppCompatActivity {
         if (user != null && !TextUtils.isEmpty(user.getUid())) {
             System.out.println(user.getUid());
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            Bundle bundle= new Bundle();
-            bundle.putString("UID", user.getUid());
-            intent.putExtras(bundle);
             startActivity(intent);
         }
     }
@@ -64,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 Intent intent = new Intent(LoginActivity.this, VerifyPhnoActivity.class);
-                intent.putExtra("mobile", mobile);
+                intent.putExtra("mobile", "+91"+mobile);
                 startActivity(intent);
             }
         });

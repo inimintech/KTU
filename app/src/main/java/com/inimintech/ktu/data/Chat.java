@@ -63,4 +63,13 @@ public class Chat {
 
         return chats;
     }
+
+    @Override
+    public String toString() {
+        return "Chat{" +
+                "userId='" + userId + '\'' +
+                ", message='" + message + '\'' +
+                ", sentTime=" + sentTime +
+                '}';
+    }
 }
