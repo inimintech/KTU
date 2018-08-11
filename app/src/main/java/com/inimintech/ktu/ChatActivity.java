@@ -25,33 +25,44 @@ public class ChatActivity extends AppCompatActivity {
     private Button sendBtn;
     private EditText msg;
     private ChatAdapter adapter;
+    private  RecyclerView rvChats;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        RecyclerView rvContacts = (RecyclerView) findViewById(R.id.reyclerview_list);
-
         initializeActivity();
-        adapter = new ChatAdapter();
-        rvContacts.setAdapter(adapter);
-        rvContacts.setLayoutManager(new LinearLayoutManager(this));
+        initializeClickEvents();
+    }
 
+    public void initializeActivity(){
+        sendBtn = findViewById(R.id.button_chatbox_send);
+        msg = findViewById(R.id.edittext_chatbox);
+        rvChats = (RecyclerView) findViewById(R.id.reyclerview_list);
+        adapter = new ChatAdapter();
+        rvChats.setAdapter(adapter);
+        rvChats.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void initializeClickEvents() {
+        sendMessgeBtnClickEvent();
+    }
+
+    private void sendMessgeBtnClickEvent() {
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(!TextUtils.isEmpty(msg.getText())){
                     adapter.addChat(new Chat("1111",
                             msg.getText().toString(), new Date().getTime()));
-                    adapter.notifyDataSetChanged();
+                    adapter.notifyItemInserted(adapter.getItemCount()-1);
+                    rvChats.smoothScrollToPosition(adapter.getItemCount()-1);
+                    msg.setText("");
                 }
             }
         });
     }
 
 
-    public void initializeActivity(){
-        sendBtn = findViewById(R.id.button_chatbox_send);
-        msg = findViewById(R.id.edittext_chatbox);
-    }
+
 }
