@@ -1,14 +1,23 @@
 package com.inimintech.ktu.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.inimintech.ktu.ChatActivity;
 import com.inimintech.ktu.R;
+import com.inimintech.ktu.adaptor.ChatAdapter;
+import com.inimintech.ktu.data.Chat;
+
+import java.util.List;
 
 /*
  * @author      Bathire Nathan
@@ -21,6 +30,11 @@ public class ChatFragment extends Fragment {
 
     private String mParam1;
     private String mParam2;
+
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
 
     public ChatFragment() {
         // Required empty public constructor
@@ -52,8 +66,20 @@ public class ChatFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chat, null);
+        View root =  inflater.inflate(R.layout.fragment_chat, container, false);
+
+        root.findViewById(R.id.go_to_chat).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), ChatActivity.class);
+                startActivity(i);
+
+            }
+        });
+
+
+        return root;
+
     }
 
 

@@ -45,9 +45,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        editTextMobile = findViewById(R.id.editTextMobile);
-        mAuth = FirebaseAuth.getInstance();
+        initializeActivity();
 
         editTextMobile.setText(getMyPhoneNO());
 
@@ -69,6 +67,11 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void initializeActivity() {
+        editTextMobile = findViewById(R.id.editTextMobile);
+        mAuth = FirebaseAuth.getInstance();
     }
 
     private String getMyPhoneNO() {

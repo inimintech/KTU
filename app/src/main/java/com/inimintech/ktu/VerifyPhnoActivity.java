@@ -35,8 +35,7 @@ public class VerifyPhnoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_phno);
 
-        mAuth = FirebaseAuth.getInstance();
-        editTextCode = findViewById(R.id.editTextCode);
+        initializeActivity();
 
         Intent intent = getIntent();
         String mobile = intent.getStringExtra("mobile");
@@ -55,6 +54,11 @@ public class VerifyPhnoActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void initializeActivity() {
+        mAuth = FirebaseAuth.getInstance();
+        editTextCode = findViewById(R.id.editTextCode);
     }
 
     private void sendVerificationCode(String mobile) {
