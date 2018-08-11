@@ -8,5 +8,6 @@ import com.google.firebase.firestore.DocumentReference;
  */
 
 public class FirestoreServices {
-    public static final DocumentReference mDocRef
+    public static final DocumentReference mDocRef = null;
+    
 }

@@ -13,6 +13,7 @@ import com.inimintech.ktu.R;
 import com.inimintech.ktu.data.Chat;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /*
@@ -52,10 +53,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         Chat chat = mChats.get(position);
 
         // Set item views based on your views and data model
-        TextView textView = viewHolder.nameTextView;
+        TextView textView = viewHolder.msg;
         textView.setText(chat.getMessage());
-        Button button = viewHolder.messageButton;
-        button.setText("Message");
+        TextView textView1 = viewHolder.msgTime;
+        textView1.setText(String.valueOf(new Date(chat.getSentTime())));
     }
 
     @Override
@@ -65,14 +66,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView nameTextView;
-        public Button messageButton;
+        public TextView msg;
+        public TextView msgTime;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            nameTextView = (TextView) itemView.findViewById(R.id.contact_name);
-            messageButton = (Button) itemView.findViewById(R.id.message_button);
+            msg = (TextView) itemView.findViewById(R.id.text_message_body);
+            msgTime = (TextView) itemView.findViewById(R.id.text_message_time);
         }
     }
 }
