@@ -12,6 +12,7 @@ import android.widget.EditText;
 import com.google.android.gms.flags.impl.DataUtils;
 import com.inimintech.ktu.adaptor.ChatAdapter;
 import com.inimintech.ktu.data.Chat;
+import com.inimintech.ktu.services.AuthServices;
 
 import java.util.Date;
 import java.util.List;
@@ -53,8 +54,9 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(!TextUtils.isEmpty(msg.getText())){
-                    adapter.addChat(new Chat("1111",
-                            msg.getText().toString(), new Date().getTime()));
+                    Chat chat = new Chat(AuthServices.getUid(),
+                            msg.getText().toString(), new Date().getTime());
+                    adapter.addChat(chat);
                     adapter.notifyItemInserted(adapter.getItemCount()-1);
                     rvChats.smoothScrollToPosition(adapter.getItemCount()-1);
                     msg.setText("");

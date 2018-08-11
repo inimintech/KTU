@@ -36,7 +36,9 @@ public class LoginActivity extends AppCompatActivity {
         if (user != null && !TextUtils.isEmpty(user.getUid())) {
             System.out.println(user.getUid());
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            intent.putExtra("uid", user.getUid());
+            Bundle bundle= new Bundle();
+            bundle.putString("UID", user.getUid());
+            intent.putExtras(bundle);
             startActivity(intent);
         }
     }
