@@ -63,11 +63,11 @@ public class ChatActivity extends AppCompatActivity {
                     chat = new Chat(AuthServices.getUid(),
                             msg.getText().toString(), new Date().getTime());
 
-                    ourdb.collection("Chats")
-                            .add(chat)
-                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    ourdb.collection("Chats").document(chat.getKey())
+                            .set(chat)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
-                                public void onSuccess(DocumentReference documentReference) {
+                                public void onSuccess(Void aVoid) {
                                     //Log.d(TAG,"DocumentSnapshot added with ID: " + documentReference.getId());
                                     adapter.addChat(chat);
                                     adapter.notifyItemInserted(adapter.getItemCount()-1);
