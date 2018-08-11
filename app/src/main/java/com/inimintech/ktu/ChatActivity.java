@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.android.gms.flags.impl.DataUtils;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.inimintech.ktu.adaptor.ChatAdapter;
 import com.inimintech.ktu.data.Chat;
 import com.inimintech.ktu.services.AuthServices;
@@ -27,6 +30,9 @@ public class ChatActivity extends AppCompatActivity {
     private EditText msg;
     private ChatAdapter adapter;
     private  RecyclerView rvChats;
+    private Chat chat;
+
+    public static final FirebaseFirestore ourdb = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +60,23 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(!TextUtils.isEmpty(msg.getText())){
-                    Chat chat = new Chat(AuthServices.getUid(),
+                    chat = new Chat(AuthServices.getUid(),
                             msg.getText().toString(), new Date().getTime());
-                    adapter.addChat(chat);
-                    adapter.notifyItemInserted(adapter.getItemCount()-1);
-                    rvChats.smoothScrollToPosition(adapter.getItemCount()-1);
+
+                    ourdb.collection("Chats")
+                            .add(chat)
+                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    //Log.d(TAG,"DocumentSnapshot added with ID: " + documentReference.getId());
+                                    adapter.addChat(chat);
+                                    adapter.notifyItemInserted(adapter.getItemCount()-1);
+                                    rvChats.smoothScrollToPosition(adapter.getItemCount()-1);
+                                }
+                            });
+
+
+
                     msg.setText("");
                 }
             }
