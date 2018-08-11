@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.inimintech.ktu.activity.MainActivity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,11 +30,15 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     @Override
-    protected void onStart(){
+    protected void onStart() {
         super.onStart();
         FirebaseUser user = mAuth.getCurrentUser();
-        if(user != null && !TextUtils.isEmpty(user.getUid()))
+        if (user != null && !TextUtils.isEmpty(user.getUid())) {
             System.out.println(user.getUid());
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.putExtra("uid", user.getUid());
+            startActivity(intent);
+        }
     }
 
     @Override

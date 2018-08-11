@@ -11,6 +11,11 @@ import android.widget.TextView;
 import com.inimintech.ktu.R;
 import com.inimintech.ktu.fragments.ChatFragment;
 
+/*
+* @author      Bathire Nathan
+* @Created on  11 Aug 2018
+* */
+
 public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
@@ -35,10 +40,6 @@ public class MainActivity extends AppCompatActivity {
             }
             transaction.commit();
             return true;
-            //Manually displaying the first fragment - one time only
-
-
-
 
             //Used to select an item programmatically
             //bottomNavigationView.getMenu().getItem(2).setChecked(true);
@@ -53,8 +54,14 @@ public class MainActivity extends AppCompatActivity {
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        setDefaultTransaction(navigation, 1);
+    }
 
-
+    private void setDefaultTransaction(BottomNavigationView navigation, int menuIndex) {
+        navigation.getMenu().getItem(menuIndex).setChecked(true);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container_main, ChatFragment.newInstance());
+        transaction.commit();
     }
 
 }
