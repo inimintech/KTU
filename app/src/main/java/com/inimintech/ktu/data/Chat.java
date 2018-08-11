@@ -2,8 +2,11 @@ package com.inimintech.ktu.data;
 
 import android.text.TextUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+
+/*
+ * @author      Bathire Nathan
+ * @Created on  11 Aug 2018
+ */
 
 public class Chat {
 
@@ -49,14 +52,5 @@ public class Chat {
         if(TextUtils.isEmpty(userId) || sentTime == null)
             return null;
         return userId+"_"+String.valueOf(sentTime);
-    }
-
-    public static List<Chat> createChatList(int i) {
-        List<Chat> chats =  new ArrayList<>();
-       for(int j = 0;j<= i;j++){
-           chats.add(new Chat("11111111",String.valueOf(i), (long) 0));
-        }
-
-        return chats;
     }
 }

@@ -10,6 +10,11 @@ import com.inimintech.ktu.data.Chat;
 
 import java.util.List;
 
+/*
+ * @author      Bathire Nathan
+ * @Created on  11 Aug 2018
+ */
+
 public class ChatActivity extends AppCompatActivity {
 
     @Override
@@ -18,11 +23,9 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         RecyclerView rvContacts = (RecyclerView) findViewById(R.id.my_recycler_view);
 
-        List<Chat> chats = Chat.createChatList(20);
-        ChatAdapter adapter = new ChatAdapter(chats);
-        // Attach the adapter to the recyclerview to populate items
+
+        ChatAdapter adapter = new ChatAdapter();
         rvContacts.setAdapter(adapter);
-        // Set layout manager to position the items
         rvContacts.setLayoutManager(new LinearLayoutManager(this));
     }
 }

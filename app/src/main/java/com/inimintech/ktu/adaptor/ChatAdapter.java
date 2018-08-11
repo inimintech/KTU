@@ -12,15 +12,29 @@ import android.widget.TextView;
 import com.inimintech.ktu.R;
 import com.inimintech.ktu.data.Chat;
 
+import java.util.ArrayList;
 import java.util.List;
+
+/*
+ * @author      Bathire Nathan
+ * @Created on  11 Aug 2018
+ */
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private List<Chat> mChats;
 
-    // Pass in the contact array into the constructor
+    public ChatAdapter() {
+        mChats = new ArrayList<>();
+    }
+
     public ChatAdapter(List<Chat> chats) {
         mChats = chats;
     }
+
+    public void addChat(Chat chat){
+        mChats.add(chat);
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
