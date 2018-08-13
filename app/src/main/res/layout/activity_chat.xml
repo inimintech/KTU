@@ -11,10 +11,12 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/reyclerview_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/viewt">
+
     </android.support.v7.widget.RecyclerView>
 
     <!-- A horizontal line between the chatbox and RecyclerView -->
@@ -22,6 +24,7 @@
         android:layout_width="0dp"
         android:layout_height="2dp"
         android:background="#dfdfdf"
+        android:id="@+id/viewt"
         android:layout_marginBottom="0dp"
         app:layout_constraintBottom_toTopOf="@+id/layout_chatbox"
         app:layout_constraintLeft_toLeftOf="parent"
