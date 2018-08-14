@@ -3,7 +3,10 @@ package com.inimintech.ktu.data;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /*
  * @author      Bathire Nathan
@@ -14,7 +17,7 @@ public class Chat {
     private String userId;
     private String message;
     private Long sentTime;
-    private int msgRating;
+    private List<String> ratedUsers;
 
     public Chat(String userId, String message, Long sentTime) {
         this.userId = userId;
@@ -55,21 +58,14 @@ public class Chat {
         return userId+"_"+String.valueOf(sentTime);
     }
 
-    public static List<Chat> createChatList(int i) {
-        List<Chat> chats =  new ArrayList<>();
-       for(int j = 0;j<= i;j++){
-           chats.add(new Chat("11111111",String.valueOf(i), (long) 0));
-        }
-
-        return chats;
+    public List<String> getRatedUsers() {
+        if(ratedUsers == null)
+            this.ratedUsers = new ArrayList<>();
+        return ratedUsers;
     }
 
-    @Override
-    public String toString() {
-        return "Chat{" +
-                "userId='" + userId + '\'' +
-                ", message='" + message + '\'' +
-                ", sentTime=" + sentTime +
-                '}';
+    public void setRatedUsers(List<String> ratedUsers) {
+        this.ratedUsers = ratedUsers;
     }
+
 }

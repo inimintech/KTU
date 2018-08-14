@@ -31,4 +31,11 @@
         android:layout_marginLeft="4dp"
         app:layout_constraintBottom_toBottomOf="@+id/text_message_body"
         app:layout_constraintLeft_toRightOf="@+id/text_message_body" />
+
+    <Button
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:id="@+id/likeMsg"
+        android:background="@drawable/like"
+        app:layout_constraintLeft_toRightOf="@+id/text_message_body"/>
 </android.support.constraint.ConstraintLayout>

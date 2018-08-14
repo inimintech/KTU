@@ -1,16 +1,22 @@
 package com.inimintech.ktu.adaptor;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.AdditionalUserInfo;
+import com.google.firebase.auth.FirebaseAuth;
 import com.inimintech.ktu.R;
 import com.inimintech.ktu.data.Chat;
+import com.inimintech.ktu.helper.ChatActivityHelper;
 import com.inimintech.ktu.services.AuthServices;
 
 import java.text.DateFormat;
@@ -69,7 +75,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int position) {
         Chat chat = mChats.get(position);
 
         // Set item views based on your views and data model
@@ -78,6 +84,22 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         TextView textView1 = viewHolder.msgTime;
         DateFormat time = new SimpleDateFormat("hh:mm a");
         textView1.setText(String.valueOf(time.format(new Date(chat.getSentTime()))));
+        if(viewHolder.getItemViewType() == VIEW_TYPE_MESSAGE_RECEIVED){
+            final Button likeBtn = viewHolder.likeBtn;
+            final AlphaAnimation alhpaAnim = new AlphaAnimation(1F, 0.8F);
+            likeBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    view.startAnimation(alhpaAnim);
+                    System.out.println(position);
+                    if(mChats.get(position).getRatedUsers().contains(AuthServices.UID))
+                        likeBtn.setBackgroundResource(R.drawable.like);
+                    else
+                        likeBtn.setBackgroundResource(R.drawable.liked);
+                    ChatActivityHelper.INSTANCE.setLike(mChats.get(position));
+                }
+            });
+        }
     }
 
     @Override
@@ -89,25 +111,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
         public TextView msg;
         public TextView msgTime;
+        public Button likeBtn;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             msg = (TextView) itemView.findViewById(R.id.text_message_body);
             msgTime = (TextView) itemView.findViewById(R.id.text_message_time);
+            likeBtn = (Button) itemView.findViewById(R.id.likeMsg);
+
         }
-    }
 
-    public class RecViewHolder extends RecyclerView.ViewHolder {
-
-        public TextView msg;
-        public TextView msgTime;
-
-        public RecViewHolder(View itemView) {
-            super(itemView);
-
-            msg = (TextView) itemView.findViewById(R.id.text_message_body);
-            msgTime = (TextView) itemView.findViewById(R.id.text_message_time);
-        }
     }
 }
