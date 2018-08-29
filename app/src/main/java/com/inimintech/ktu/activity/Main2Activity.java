@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.inimintech.ktu.R;
+import com.inimintech.ktu.fragments.ChatFragment;
 import com.inimintech.ktu.fragments.ListContentFragment;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class Main2Activity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
         adapter.addFragment(new ListContentFragment(), "List");
-        adapter.addFragment(new ListContentFragment(), "Tile");
+        adapter.addFragment(new ChatFragment(), "Tile");
         adapter.addFragment(new ListContentFragment(), "Card");
         viewPager.setAdapter(adapter);
     }
