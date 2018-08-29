@@ -13,6 +13,9 @@ public class AuthServices {
     private static final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     public static final String UID = INSTANCE.getUid();
 
+    private AuthServices(){
+    }
+
     private String getUid(){
         FirebaseUser user = mAuth.getCurrentUser();
         if(user != null)

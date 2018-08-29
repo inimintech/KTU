@@ -22,7 +22,8 @@
         <activity android:name=".ChatActivity" />
         <activity
             android:name=".activity.MainActivity"
-            android:label="@string/title_activity_main"></activity>
+            android:label="@string/title_activity_main" />
+        <activity android:name=".activity.Main2Activity"></activity>
     </application>
 
 </manifest>
