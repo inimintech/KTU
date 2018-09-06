@@ -1,7 +1,6 @@
 package com.inimintech.ktu.adaptor;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,10 +9,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.firebase.auth.AdditionalUserInfo;
-import com.google.firebase.auth.FirebaseAuth;
 import com.inimintech.ktu.R;
 import com.inimintech.ktu.data.Chat;
 import com.inimintech.ktu.helper.ChatActivityHelper;
@@ -22,6 +18,8 @@ import com.inimintech.ktu.services.AuthServices;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -39,10 +37,23 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     public ChatAdapter(List<Chat> chats) {
         mChats = chats;
+        sort();
     }
 
     public void addChat(Chat chat){
         mChats.add(chat);
+        sort();
+    }
+
+    private void sort(){
+        Collections.sort(mChats, new Comparator<Chat>() {
+            @Override
+            public int compare(Chat chat, Chat t1) {
+                if(chat.getSentTime() > t1.getSentTime())
+                    return 1;
+                return -1;
+            }
+        });
     }
 
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;

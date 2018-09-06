@@ -1,5 +1,6 @@
 package com.inimintech.ktu.activity;
 
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -7,10 +8,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.inimintech.ktu.R;
 import com.inimintech.ktu.fragments.ChatFragment;
 import com.inimintech.ktu.fragments.ListContentFragment;
+import com.inimintech.ktu.services.NotificationService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +35,8 @@ public class Main2Activity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
         adapter.addFragment(new ListContentFragment(), "List");
-        adapter.addFragment(new ChatFragment(), "Tile");
-        adapter.addFragment(new ListContentFragment(), "Card");
+        adapter.addFragment(new ChatFragment(), "Discussions");
+        adapter.addFragment(new ListContentFragment(), "Saved Discussions");
         viewPager.setAdapter(adapter);
     }
 
@@ -65,5 +68,29 @@ public class Main2Activity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
+    }
+
+    private boolean doubleBackToExitPressedOnce;
+    private Handler mHandler = new Handler();
+
+    private final Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            doubleBackToExitPressedOnce = false;
+        }
+    };
+
+
+    @Override
+    public void onBackPressed(){
+        if (doubleBackToExitPressedOnce) {
+            finish();
+            System.exit(1);
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        mHandler.postDelayed(mRunnable, 2000);
     }
 }

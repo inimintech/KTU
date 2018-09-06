@@ -22,10 +22,24 @@ import javax.annotation.Nullable;
 public class ChatActivityHelper {
 
     private static final String TAG = ChatActivity.class.getName();
-    private static final FirebaseFirestore ourdb = FirebaseFirestore.getInstance();
-    public CollectionReference colRef = ourdb.collection("chats");
+    private static FirebaseFirestore ourdb = FirebaseFirestore.getInstance();
+    public CollectionReference colRef ;
 
     public static final ChatActivityHelper INSTANCE = new ChatActivityHelper();
+
+    private ChatActivityHelper(){
+        this.colRef= ourdb.collection("chats");
+    }
+
+    private  Chat oldChat;
+
+    private ChatActivityHelper(String collectionName){
+        this.colRef= ourdb.collection(collectionName);
+    }
+
+    public static ChatActivityHelper getInstance(String collectionName){
+        return new ChatActivityHelper(collectionName);
+    }
 
     public void saveToDB(final Chat chat) {
         colRef.document(chat.getKey()).set(chat).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -53,7 +67,10 @@ public class ChatActivityHelper {
                             switch (dc.getType()) {
                                 case ADDED:
                                     Chat chat = dc.getDocument().toObject(Chat.class);
-                                    addToView(chat);
+                                    if(oldChat == null || !oldChat.getKey().equals(chat.getKey())) {
+                                        addToView(chat);
+                                        oldChat = chat;
+                                    }
                                     Log.d(TAG, "New city: " + dc.getDocument().getData());
                                     break;
                                 case MODIFIED:

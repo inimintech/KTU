@@ -18,8 +18,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.inimintech.ktu.activity.MainActivity;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.inimintech.ktu.activity.Main2Activity;
+import com.inimintech.ktu.services.AuthServices;
+import com.inimintech.ktu.services.FirestoreServices;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class VerifyPhnoActivity extends AppCompatActivity {
@@ -107,7 +113,13 @@ public class VerifyPhnoActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             String user = mAuth.getUid();
-                            Intent intent = new Intent(VerifyPhnoActivity.this, MainActivity.class);
+                            String token = FirebaseInstanceId.getInstance().getToken();
+                            DocumentReference re = FirestoreServices.CurrentUser;
+                            Map<String, String> userMap = new HashMap<>();
+                            userMap.put("uid", user);
+                            userMap.put("tokenId", token);
+                            re.set(userMap);
+                            Intent intent = new Intent(VerifyPhnoActivity.this, Main2Activity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             Bundle bundle= new Bundle();
                             bundle.putString("UID", user);

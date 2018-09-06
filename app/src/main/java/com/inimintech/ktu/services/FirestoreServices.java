@@ -1,6 +1,5 @@
 package com.inimintech.ktu.services;
 
-import android.util.Log;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -16,6 +15,9 @@ import com.inimintech.ktu.data.Chat;
 
 public class FirestoreServices {
     public static final FirebaseFirestore ourdb = FirebaseFirestore.getInstance();
+
+    public static final DocumentReference CurrentUser = ourdb.
+            collection("users").document(AuthServices.UID);
 
     public static void insertData(String collection, Chat chat) {
         ourdb.collection(collection)

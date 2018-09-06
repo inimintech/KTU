@@ -28,11 +28,19 @@ public class ChatActivity extends AppCompatActivity {
     public static ChatAdapter adapter;
     public static RecyclerView rvChats;
     private Chat chat;
+    private ChatActivityHelper chatActivityHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        String key = getIntent().getStringExtra("discussionKey");
+        String topic = getIntent().getStringExtra("discussionName");
+        getSupportActionBar().setTitle(topic);
+        if(TextUtils.isEmpty(key))
+            chatActivityHelper = ChatActivityHelper.INSTANCE;
+        else
+            chatActivityHelper = ChatActivityHelper.getInstance(key);
         initializeActivity();
 
     }
@@ -40,25 +48,40 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onStart(){
         super.onStart();
-        initializeClickEvents();
-        ChatActivityHelper.INSTANCE.startListener();
 
+        LinearLayoutManager man = new LinearLayoutManager(this);
+        man.setStackFromEnd(true);
+        adapter = new ChatAdapter();
+        rvChats.setAdapter(adapter);
+        rvChats.setLayoutManager(man);
+
+        initializeClickEvents();
+        chatActivityHelper.startListener();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
     }
 
     @Override
     protected void onStop(){
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
         adapter = null;
         rvChats = null;
     }
 
     public void initializeActivity(){
+
         sendBtn = findViewById(R.id.button_chatbox_send);
         msg = findViewById(R.id.edittext_chatbox);
         rvChats = (RecyclerView) findViewById(R.id.reyclerview_list);
-        adapter = new ChatAdapter();
-        rvChats.setAdapter(adapter);
-        rvChats.setLayoutManager(new LinearLayoutManager(this));
+
     }
 
     private void initializeClickEvents() {
@@ -72,7 +95,7 @@ public class ChatActivity extends AppCompatActivity {
                 if(!TextUtils.isEmpty(msg.getText())){
                     chat = new Chat(AuthServices.UID,
                             msg.getText().toString(), new Date().getTime());
-                   ChatActivityHelper.INSTANCE.saveToDB(chat);
+                   chatActivityHelper.saveToDB(chat);
                     msg.setText("");
                 }
             }

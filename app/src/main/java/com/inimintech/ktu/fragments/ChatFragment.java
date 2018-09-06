@@ -126,6 +126,8 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 System.out.println(view.getTag().toString());
                 Intent i = new Intent(getActivity(), ChatActivity.class);
                 i.putExtra("discussionKey", view.getTag().toString());
+                Discussion d = discussions.get(view.getTag().toString());
+                i.putExtra("discussionName", d.getTopic());
                 startActivity(i);
             }
         };
