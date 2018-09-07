@@ -1,12 +1,24 @@
 package com.inimintech.ktu.data;
 
-public class Discussion {
+import java.io.Serializable;
+
+public class Discussion implements Serializable{
 
     private String topic;
 
     private long startTime;
 
     private long endTime;
+
+    public Discussion(){
+
+    }
+
+    public Discussion(String topic, long startTime, long endTime){
+        this.topic = topic;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 
     public String getTopic() {
         return topic;

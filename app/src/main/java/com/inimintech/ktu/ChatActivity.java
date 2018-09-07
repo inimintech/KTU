@@ -1,20 +1,27 @@
 package com.inimintech.ktu;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.inimintech.ktu.activity.Main2Activity;
 import com.inimintech.ktu.adaptor.ChatAdapter;
 import com.inimintech.ktu.data.Chat;
+import com.inimintech.ktu.data.Discussion;
 import com.inimintech.ktu.helper.ChatActivityHelper;
 import com.inimintech.ktu.services.AuthServices;
 
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /*
  * @author      Bathire Nathan
@@ -29,6 +36,18 @@ public class ChatActivity extends AppCompatActivity {
     public static RecyclerView rvChats;
     private Chat chat;
     private ChatActivityHelper chatActivityHelper;
+    private Discussion d;
+
+    private Runnable Timer_Tick = new Runnable() {
+        public void run() {
+
+            Toast.makeText(getApplicationContext(), "Discussion time is over", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,38 +55,55 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         String key = getIntent().getStringExtra("discussionKey");
         String topic = getIntent().getStringExtra("discussionName");
+        d = (Discussion) getIntent().getExtras().get("discussion");
+        Log.d(TAG,d.toString());
         getSupportActionBar().setTitle(topic);
         if(TextUtils.isEmpty(key))
             chatActivityHelper = ChatActivityHelper.INSTANCE;
         else
             chatActivityHelper = ChatActivityHelper.getInstance(key);
         initializeActivity();
-
     }
 
     @Override
     protected void onStart(){
         super.onStart();
 
-        LinearLayoutManager man = new LinearLayoutManager(this);
-        man.setStackFromEnd(true);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        manager.setStackFromEnd(true);
         adapter = new ChatAdapter();
         rvChats.setAdapter(adapter);
-        rvChats.setLayoutManager(man);
+        rvChats.setLayoutManager(manager);
 
         initializeClickEvents();
+        chatActivityHelper.reset();
         chatActivityHelper.startListener();
+        startScheduler();
     }
 
-    @Override
-    protected void onResume(){
-        super.onResume();
+    private void startScheduler() {
+        Date date = new Date();
+        if(d.getEndTime() > date.getTime()) {
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    timerMethod();
+                }
+            }, new Date(d.getEndTime()));
+        }else{
+            Intent i = new Intent(this, Main2Activity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+        }
     }
 
+    private void timerMethod() {  this.runOnUiThread(Timer_Tick);   }
+
     @Override
-    protected void onStop(){
-        super.onStop();
-    }
+    protected void onResume() {  super.onResume();   }
+
+    @Override
+    protected void onStop(){   super.onStop();   }
 
     @Override
     protected void onDestroy(){
@@ -84,9 +120,7 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
-    private void initializeClickEvents() {
-        sendMessgeBtnClickEvent();
-    }
+    private void initializeClickEvents() {   sendMessgeBtnClickEvent();   }
 
     private void sendMessgeBtnClickEvent() {
         sendBtn.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +135,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
+
 
 
 }

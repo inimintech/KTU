@@ -2,6 +2,7 @@ package com.inimintech.ktu.services;
 
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.inimintech.ktu.data.Chat;
@@ -34,6 +35,10 @@ public class FirestoreServices {
 //                        //Log.w(TAG, "Error adding document", e);
 //                    }
 //                });
+    }
+
+    public static CollectionReference getTopicCollection(){
+        return ourdb.collection("Discussions");
     }
 
 }

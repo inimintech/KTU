@@ -10,11 +10,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.inimintech.ktu.ChatActivity;
@@ -70,20 +72,17 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
         loadTopics();
 
-        /*topicsList.addView(createViews(topicsList));
-        topicsList.addView(createViews(topicsList));
-        topicsList.addView(createViews(topicsList));
-        topicsList.addView(createViews(topicsList));*/
-
-
         return root;
 
     }
 
     private void loadTopics(){
         topicsList.removeAllViews();
+        long val = new Date().getTime();
+        Log.d(TAG, String.valueOf(val));
         discussions = new HashMap<>();
         FirestoreServices.ourdb.collection("Discussions")
+                .whereGreaterThan("endTime", new Date().getTime())
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -124,10 +123,13 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             public void onClick(View view) {
                 Log.d(TAG,view.getTag().toString());
                 System.out.println(view.getTag().toString());
-                Intent i = new Intent(getActivity(), ChatActivity.class);
-                i.putExtra("discussionKey", view.getTag().toString());
                 Discussion d = discussions.get(view.getTag().toString());
+                Intent i = new Intent(getActivity(), ChatActivity.class);
+                Bundle b = new Bundle();
+                b.putSerializable("discussion", d);
+                i.putExtra("discussionKey", view.getTag().toString());
                 i.putExtra("discussionName", d.getTopic());
+                i.putExtras(b);
                 startActivity(i);
             }
         };

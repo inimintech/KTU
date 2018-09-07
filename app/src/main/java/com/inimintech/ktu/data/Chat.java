@@ -55,6 +55,12 @@ public class Chat {
         return userId+"_"+String.valueOf(sentTime);
     }
 
+    public String getMsgKey(){
+        if(TextUtils.isEmpty(userId) || message == null)
+            return null;
+        return userId+"_"+message;
+    }
+
     public List<String> getRatedUsers() {
         if(ratedUsers == null)
             this.ratedUsers = new ArrayList<>();

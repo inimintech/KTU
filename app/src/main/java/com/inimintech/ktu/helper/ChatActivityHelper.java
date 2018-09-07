@@ -67,9 +67,13 @@ public class ChatActivityHelper {
                             switch (dc.getType()) {
                                 case ADDED:
                                     Chat chat = dc.getDocument().toObject(Chat.class);
-                                    if(oldChat == null || !oldChat.getKey().equals(chat.getKey())) {
+                                    if(chat.getUserId().equals(AuthServices.UID)) {
+                                        if (oldChat == null || !oldChat.getMsgKey().equals(chat.getMsgKey())) {
+                                            addToView(chat);
+                                            oldChat = chat;
+                                        }
+                                    }else{
                                         addToView(chat);
-                                        oldChat = chat;
                                     }
                                     Log.d(TAG, "New city: " + dc.getDocument().getData());
                                     break;
@@ -107,5 +111,9 @@ public class ChatActivityHelper {
                     Log.d(TAG, "updated Successfully");
             }
         });
+    }
+
+    public void reset(){
+        oldChat = null;
     }
 }

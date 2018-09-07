@@ -1,5 +1,6 @@
 package com.inimintech.ktu.activity;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -34,8 +35,8 @@ public class Main2Activity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
-        adapter.addFragment(new ListContentFragment(), "List");
         adapter.addFragment(new ChatFragment(), "Discussions");
+        adapter.addFragment(new ListContentFragment(), "Admin");
         adapter.addFragment(new ListContentFragment(), "Saved Discussions");
         viewPager.setAdapter(adapter);
     }
@@ -85,7 +86,11 @@ public class Main2Activity extends AppCompatActivity {
     public void onBackPressed(){
         if (doubleBackToExitPressedOnce) {
             finish();
-            System.exit(1);
+            Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+            homeIntent.addCategory(Intent.CATEGORY_HOME);
+            homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(homeIntent);
+            return;
         }
 
         this.doubleBackToExitPressedOnce = true;
