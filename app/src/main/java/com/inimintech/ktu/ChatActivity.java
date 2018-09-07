@@ -1,6 +1,7 @@
 package com.inimintech.ktu;
 
 import android.content.Intent;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.inimintech.ktu.activity.Main2Activity;
@@ -22,6 +24,9 @@ import com.inimintech.ktu.services.AuthServices;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+
+import static android.media.MediaExtractor.MetricsConstants.FORMAT;
 
 /*
  * @author      Bathire Nathan
@@ -32,20 +37,41 @@ public class ChatActivity extends AppCompatActivity {
     private static final String TAG = ChatActivity.class.getName();
     private Button sendBtn;
     private EditText msg;
+    private TextView timer;
     public static ChatAdapter adapter;
     public static RecyclerView rvChats;
     private Chat chat;
     private ChatActivityHelper chatActivityHelper;
     private Discussion d;
 
+    CountDownTimer cTimer = null;
+
+    //start timer function
+    void startTimer(long diff) {
+        if(cTimer!=null)
+            cTimer.cancel();
+
+        cTimer = new CountDownTimer(diff, 1000) {
+            public void onTick(long millis) {
+                long min = (millis / 1000)  / 60;
+                long sec = (millis / 1000) % 60;
+                String minutes = min < 10 ? "0"+min : ""+min;
+                String seconds= sec < 10 ? "0"+sec : ""+sec;
+                String rem = minutes+":"+seconds;
+                timer.setText(rem);
+            }
+            public void onFinish() {
+            }
+        };
+        cTimer.start();
+    }
+
     private Runnable Timer_Tick = new Runnable() {
         public void run() {
-
             Toast.makeText(getApplicationContext(), "Discussion time is over", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
-
         }
     };
 
@@ -78,12 +104,13 @@ public class ChatActivity extends AppCompatActivity {
         initializeClickEvents();
         chatActivityHelper.reset();
         chatActivityHelper.startListener();
-        startScheduler();
+        long currentTime = new Date().getTime();
+        startScheduler(currentTime);
+        startTimer(d.getEndTime() - currentTime);
     }
 
-    private void startScheduler() {
-        Date date = new Date();
-        if(d.getEndTime() > date.getTime()) {
+    private void startScheduler(long currentTime) {
+        if(d.getEndTime() > currentTime) {
             new Timer().schedule(new TimerTask() {
                 @Override
                 public void run() {
@@ -116,6 +143,7 @@ public class ChatActivity extends AppCompatActivity {
 
         sendBtn = findViewById(R.id.button_chatbox_send);
         msg = findViewById(R.id.edittext_chatbox);
+        timer = findViewById(R.id.timer);
         rvChats = (RecyclerView) findViewById(R.id.reyclerview_list);
 
     }
