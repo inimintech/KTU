@@ -24,6 +24,7 @@ import com.inimintech.ktu.R;
 import com.inimintech.ktu.data.Discussion;
 import com.inimintech.ktu.services.FirestoreServices;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -109,8 +110,17 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
         TextView topicName = (TextView) inflate.findViewById(R.id.textViewName);
         TextView startTime = (TextView) inflate.findViewById(R.id.textViewVersion);
+        TextView endTime = (TextView) inflate.findViewById(R.id.endTime);
+
+        Date sDate =new Date(d.getStartTime());
+        Date eDate =new Date(d.getEndTime());
+        SimpleDateFormat sdf=new SimpleDateFormat("hh:mm a");
+        String sTime = "Start Time :"+ sdf.format(sDate);
+        String eTime = "End Time :"+sdf.format(eDate);
+
         topicName.setText(d.getTopic());
-        startTime.setText(String.valueOf(new Date(d.getEndTime())));
+        startTime.setText(String.valueOf(sTime));
+        endTime.setText(String.valueOf(eTime));
 
         inflate.setOnClickListener(clickListerner());
         return inflate;
@@ -138,7 +148,6 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     @Override
     public void onRefresh() {
-
         loadTopics();
     }
 }

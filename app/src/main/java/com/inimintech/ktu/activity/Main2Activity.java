@@ -14,7 +14,6 @@ import android.widget.Toast;
 import com.inimintech.ktu.R;
 import com.inimintech.ktu.fragments.ChatFragment;
 import com.inimintech.ktu.fragments.ListContentFragment;
-import com.inimintech.ktu.services.NotificationService;
 
 import java.util.ArrayList;
 import java.util.List;

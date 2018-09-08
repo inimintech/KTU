@@ -101,7 +101,8 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    private void timerMethod() {  this.runOnUiThread(Timer_Tick);   }
+    private void timerMethod() {
+        this.runOnUiThread(Timer_Tick);   }
 
     @Override
     protected void onResume() {  super.onResume();   }
