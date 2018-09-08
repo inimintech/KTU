@@ -2,6 +2,7 @@ package com.inimintech.ktu;
 
 import android.content.Intent;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,9 +25,6 @@ import com.inimintech.ktu.services.AuthServices;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
-
-import static android.media.MediaExtractor.MetricsConstants.FORMAT;
 
 /*
  * @author      Bathire Nathan
@@ -44,28 +42,7 @@ public class ChatActivity extends AppCompatActivity {
     private ChatActivityHelper chatActivityHelper;
     private Discussion d;
 
-    CountDownTimer cTimer = null;
-
-    //start timer function
-    void startTimer(long diff) {
-        if(cTimer!=null)
-            cTimer.cancel();
-
-        cTimer = new CountDownTimer(diff, 1000) {
-            public void onTick(long millis) {
-                long min = (millis / 1000)  / 60;
-                long sec = (millis / 1000) % 60;
-                String minutes = min < 10 ? "0"+min : ""+min;
-                String seconds= sec < 10 ? "0"+sec : ""+sec;
-                String rem = minutes+":"+seconds;
-                timer.setText(rem);
-            }
-            public void onFinish() {
-            }
-        };
-        cTimer.start();
-    }
-
+    private CountDownTimer cTimer = null;
     private Runnable Timer_Tick = new Runnable() {
         public void run() {
             Toast.makeText(getApplicationContext(), "Discussion time is over", Toast.LENGTH_SHORT).show();
@@ -157,13 +134,41 @@ public class ChatActivity extends AppCompatActivity {
                 if(!TextUtils.isEmpty(msg.getText())){
                     chat = new Chat(AuthServices.UID,
                             msg.getText().toString(), new Date().getTime());
-                   chatActivityHelper.saveToDB(chat);
+                    chatActivityHelper.saveToDB(chat);
                     msg.setText("");
+                    sendBtn.setClickable(false);
+
+                    new Handler().postDelayed(mRunnable, 5000);
                 }
             }
         });
     }
 
 
+    private final Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            sendBtn.setClickable(true);
+        }
+    };
+
+    void startTimer(long diff) {
+        if(cTimer!=null)
+            cTimer.cancel();
+
+        cTimer = new CountDownTimer(diff, 1000) {
+            public void onTick(long millis) {
+                long min = (millis / 1000)  / 60;
+                long sec = (millis / 1000) % 60;
+                String minutes = min < 10 ? "0"+min : ""+min;
+                String seconds= sec < 10 ? "0"+sec : ""+sec;
+                String rem = minutes+":"+seconds;
+                timer.setText(rem);
+            }
+            public void onFinish() {
+            }
+        };
+        cTimer.start();
+    }
 
 }
