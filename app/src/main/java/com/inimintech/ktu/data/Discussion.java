@@ -1,6 +1,7 @@
 package com.inimintech.ktu.data;
 
 import java.io.Serializable;
+import java.util.Map;
 
 public class Discussion implements Serializable{
 
@@ -9,6 +10,10 @@ public class Discussion implements Serializable{
     private long startTime;
 
     private long endTime;
+
+    private String categoryId;
+
+    private Map<String, String> loggedInusers;
 
     public Discussion(){
 
@@ -44,12 +49,22 @@ public class Discussion implements Serializable{
         this.endTime = endTime;
     }
 
+    public String getCategoryId() {   return categoryId;   }
+
+    public void setCategoryId(String categoryId) {  this.categoryId = categoryId;  }
+
+    public Map<String, String> getLoggedInusers() {    return loggedInusers;    }
+
+    public void setLoggedInusers(Map<String, String> loggedInusers) {     this.loggedInusers = loggedInusers;   }
+
     @Override
     public String toString() {
         return "Discussion{" +
                 "topic='" + topic + '\'' +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
+                ", categoryId='" + categoryId + '\'' +
+                ", loggedInusers=" + loggedInusers +
                 '}';
     }
 }

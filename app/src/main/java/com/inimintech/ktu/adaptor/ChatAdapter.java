@@ -40,7 +40,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         sort();
     }
 
-    public void addChat(Chat chat){
+    public void addChat(Chat chat) {
         mChats.add(chat);
         sort();
     }
@@ -116,6 +116,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         return mChats.size();
+    }
+
+
+    public List<Chat> getmChats() {
+        return mChats;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

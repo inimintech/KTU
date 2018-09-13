@@ -21,7 +21,6 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.inimintech.ktu.activity.Main2Activity;
-import com.inimintech.ktu.services.AuthServices;
 import com.inimintech.ktu.services.FirestoreServices;
 
 import java.util.HashMap;

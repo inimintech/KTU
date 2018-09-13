@@ -31,8 +31,6 @@ public class ChatActivityHelper {
         this.colRef= ourdb.collection("chats");
     }
 
-    private  Chat oldChat;
-
     private ChatActivityHelper(String collectionName){
         this.colRef= ourdb.collection(collectionName);
     }
@@ -67,14 +65,7 @@ public class ChatActivityHelper {
                             switch (dc.getType()) {
                                 case ADDED:
                                     Chat chat = dc.getDocument().toObject(Chat.class);
-                                    if(chat.getUserId().equals(AuthServices.UID)) {
-                                        if (oldChat == null || !oldChat.getMsgKey().equals(chat.getMsgKey())) {
-                                            addToView(chat);
-                                            oldChat = chat;
-                                        }
-                                    }else{
-                                        addToView(chat);
-                                    }
+                                    addToView(chat);
                                     Log.d(TAG, "New city: " + dc.getDocument().getData());
                                     break;
                                 case MODIFIED:
@@ -91,9 +82,12 @@ public class ChatActivityHelper {
 
     private void addToView(Chat chat) {
         ChatAdapter adapter = ChatActivity.adapter;
-        adapter.addChat(chat);
-        adapter.notifyItemInserted(adapter.getItemCount()-1);
-        ChatActivity.rvChats.smoothScrollToPosition(adapter.getItemCount()-1);
+        if (adapter.getmChats().size() == 0 ||
+                !adapter.getmChats().get(adapter.getmChats().size() - 1).equals(chat)) {
+            adapter.addChat(chat);
+            adapter.notifyItemInserted(adapter.getItemCount() - 1);
+            ChatActivity.rvChats.smoothScrollToPosition(adapter.getItemCount() - 1);
+        }
     }
 
     public void setLike(Chat chat){
@@ -113,7 +107,4 @@ public class ChatActivityHelper {
         });
     }
 
-    public void reset(){
-        oldChat = null;
-    }
 }

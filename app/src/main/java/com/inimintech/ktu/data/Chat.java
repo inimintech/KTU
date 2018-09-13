@@ -71,4 +71,11 @@ public class Chat {
         this.ratedUsers = ratedUsers;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        Chat ch = (Chat) obj;
+        if(ch.getMsgKey().equals(this.getMsgKey()))
+            return true;
+        return false;
+    }
 }

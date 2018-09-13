@@ -66,12 +66,22 @@ public class ChatActivity extends AppCompatActivity {
         else
             chatActivityHelper = ChatActivityHelper.getInstance(key);
         initializeActivity();
+        setAdapterAndView();
     }
 
     @Override
     protected void onStart(){
         super.onStart();
+        if (adapter.getmChats().size() > 0){
+            adapter.notifyDataSetChanged();
+            rvChats.smoothScrollToPosition(adapter.getItemCount() - 1);
+        }
+        long currentTime = new Date().getTime();
+        startScheduler(currentTime);
+        startTimer(d.getEndTime() - currentTime);
+    }
 
+    private void setAdapterAndView() {
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setStackFromEnd(true);
         adapter = new ChatAdapter();
@@ -79,11 +89,7 @@ public class ChatActivity extends AppCompatActivity {
         rvChats.setLayoutManager(manager);
 
         initializeClickEvents();
-        chatActivityHelper.reset();
         chatActivityHelper.startListener();
-        long currentTime = new Date().getTime();
-        startScheduler(currentTime);
-        startTimer(d.getEndTime() - currentTime);
     }
 
     private void startScheduler(long currentTime) {
@@ -105,7 +111,13 @@ public class ChatActivity extends AppCompatActivity {
         this.runOnUiThread(Timer_Tick);   }
 
     @Override
-    protected void onResume() {  super.onResume();   }
+    protected void onResume() {
+        super.onResume();
+        if (adapter.getmChats().size() > 0){
+            adapter.notifyDataSetChanged();
+            rvChats.smoothScrollToPosition(adapter.getItemCount() - 1);
+        }
+    }
 
     @Override
     protected void onStop(){   super.onStop();   }
@@ -123,6 +135,7 @@ public class ChatActivity extends AppCompatActivity {
         msg = findViewById(R.id.edittext_chatbox);
         timer = findViewById(R.id.timer);
         rvChats = (RecyclerView) findViewById(R.id.reyclerview_list);
+        rvChats.setHasFixedSize(true);
 
     }
 
