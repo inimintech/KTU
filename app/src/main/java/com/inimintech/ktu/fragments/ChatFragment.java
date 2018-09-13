@@ -38,7 +38,7 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     SwipeRefreshLayout swipeLayout;
 
     private static final String TAG = ChatFragment.class.getName();
-    private LinearLayout topicsList;
+    private LinearLayout topicsList, categories;
     private Map<String, Discussion> discussions;
 
 
@@ -61,6 +61,7 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                              Bundle savedInstanceState) {
         View root =  inflater.inflate(R.layout.fragment_chat, container, false);
         topicsList = root.findViewById(R.id.topicsList);
+        categories = root.findViewById(R.id.cartegory);
 
         swipeLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipe_container);
         swipeLayout.setOnRefreshListener(this);
@@ -71,9 +72,14 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
         swipeLayout.setRefreshing(true);
 
+        loadCategories();
         loadTopics();
 
         return root;
+
+    }
+
+    private void loadCategories() {
 
     }
 
