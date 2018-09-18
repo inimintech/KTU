@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.inimintech.ktu.R;
 import com.inimintech.ktu.fragments.ChatFragment;
 import com.inimintech.ktu.fragments.ListContentFragment;
+import com.inimintech.ktu.fragments.SavedDiscussionFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,8 @@ public class Main2Activity extends AppCompatActivity {
         Adapter adapter = new Adapter(getSupportFragmentManager());
         adapter.addFragment(new ChatFragment(), "Discussions");
         adapter.addFragment(new ListContentFragment(), "Admin");
-        adapter.addFragment(new ListContentFragment(), "Saved Discussions");
+        adapter.addFragment(new SavedDiscussionFragment(), "Saved Discussions");
+
         viewPager.setAdapter(adapter);
     }
 
