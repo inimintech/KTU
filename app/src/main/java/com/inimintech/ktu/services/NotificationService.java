@@ -40,7 +40,7 @@ public class NotificationService extends FirebaseMessagingService {
     public void onNewToken(String token) {
         Log.d(TAG, "Refreshed token: " + token);
 
-        sendRegistrationToServer(token);
+        //sendRegistrationToServer(token);
     }
 
     private void handleNow() {

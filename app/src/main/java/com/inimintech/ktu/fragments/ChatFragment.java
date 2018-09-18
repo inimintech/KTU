@@ -10,13 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.inimintech.ktu.ChatActivity;
@@ -28,6 +27,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.inimintech.ktu.services.FirestoreServices.discussionCategory;
 
 /*
  * @author      Bathire Nathan
@@ -80,8 +81,43 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void loadCategories() {
-
+        if(discussionCategory == null) {
+            FirestoreServices.categoriesRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        discussionCategory = task.getResult().getData();
+                        addViewForCategories();
+                        Log.d("Loading Categories", discussionCategory.toString());
+                    }
+                }
+            });
+        }else{
+            /*for(String key : discussionCategory.keySet()){
+                Log.d("keyyy", key);
+            }*/
+            addViewForCategories();
+        }
     }
+
+    private void addViewForCategories() {
+        for(String key : discussionCategory.keySet()){
+            categories.addView(getCategeoriesView(key,
+                    discussionCategory.get(key).toString()));
+        }
+    }
+
+
+
+    private View getCategeoriesView(String key, String value){
+        LayoutInflater li = LayoutInflater.from(getContext());
+        View inflate = li.inflate(R.layout.item_categories, categories, false );
+        inflate.setTag(key);
+        TextView tv = (TextView) inflate.findViewById(R.id.cartegory_names);
+        tv.setText(value);
+        return inflate;
+    }
+
 
     private void loadTopics(){
         topicsList.removeAllViews();

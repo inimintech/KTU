@@ -2,6 +2,7 @@ package com.inimintech.ktu.services;
 
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,27 +25,31 @@ import java.util.Map;
 
 
 public class FirestoreServices {
-    private static Map<String, Object> discussionCategory = null;
 
-    enum Collections{
-        Category, Discussions
+    enum CollectionsEnum{
+        users, Category, Discussions
     }
 
     enum Documents{
         categories
     }
 
+    public static Map<String, Object> discussionCategory = null ;
+
     public static final FirebaseFirestore ourdb = FirebaseFirestore.getInstance();
 
-    public static final DocumentReference CurrentUser = ourdb.
-            collection("users").document(AuthServices.UID);
+    public static final DocumentReference CurrentUser = ourdb
+            .collection(CollectionsEnum.users.toString())
+            .document(AuthServices.UID);
 
-    public static final Map<String, Object> CATEGORY = loadCat();
+    public static final DocumentReference categoriesRef = ourdb
+            .collection(CollectionsEnum.Category.toString())
+            .document(Documents.categories.toString());
 
-    private static Map<String,Object> loadCat() {
-        if (discussionCategory == null)
-            getAllCategories();
-        return discussionCategory;
+
+
+    static {
+
     }
 
 
@@ -57,37 +62,11 @@ public class FirestoreServices {
                         //Log.d(TAG,"DocumentSnapshot added with ID: " + documentReference.getId());
                     }
                 });
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(Exception e) {
-//                        //Log.w(TAG, "Error adding document", e);
-//                    }
-//                });
     }
 
     public static CollectionReference getTopicCollection(){
         return ourdb.collection("Discussions");
     }
 
-    /*public static final void getAllCategories(){
-        ourdb.collection("Category").get("OI4GGIypduTiKsMgGMLZ");
-    }
-*/
 
-    private static void getAllCategories() {
-        ourdb.collection(String.valueOf(Collections.Category))
-                .document(String.valueOf(Documents.categories))
-                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()){
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        discussionCategory =  document.getData();
-                    }
-
-                }
-            }
-        });
-    }
 }
