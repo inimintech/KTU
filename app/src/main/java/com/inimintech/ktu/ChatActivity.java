@@ -193,7 +193,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.isSuccessful()){
-                    Discussion d = task.getResult().toObject(Discussion.class);
+                    d = task.getResult().toObject(Discussion.class);
                     if (d.getLoggedInusers() != null){
                         int i = d.getLoggedInusers().keySet().size();
                         i = i+1;
