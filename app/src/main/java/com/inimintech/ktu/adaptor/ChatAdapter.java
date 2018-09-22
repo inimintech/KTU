@@ -10,6 +10,7 @@ import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.inimintech.ktu.R;
 import com.inimintech.ktu.data.Chat;
 import com.inimintech.ktu.helper.ChatActivityHelper;

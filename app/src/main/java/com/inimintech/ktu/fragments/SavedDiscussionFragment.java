@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.inimintech.ktu.ChatActivity;
+import com.inimintech.ktu.HistoryChatActivity;
 import com.inimintech.ktu.R;
 import com.inimintech.ktu.data.Discussion;
 import com.inimintech.ktu.services.LocalSaveServices;
@@ -25,6 +26,7 @@ import java.util.Map;
 public class SavedDiscussionFragment extends Fragment {
     private LinearLayout historyTopicsList;
     private static final String TAG = SavedDiscussionFragment.class.getName();
+    private Map<String, Discussion> discussions;
 
 
     @Override
@@ -41,8 +43,10 @@ public class SavedDiscussionFragment extends Fragment {
         LocalSaveServices localserv = new LocalSaveServices();
         historyTopicsList.removeAllViews();
         Map<String,Discussion> TopicList = localserv.getLocalTopicList(getContext());
-        for (Map.Entry<String,Discussion> entry : TopicList.entrySet()) {
-            historyTopicsList.addView(getView(historyTopicsList, entry.getValue(), entry.getKey()));
+        if(TopicList != null){
+            for (Map.Entry<String,Discussion> entry : TopicList.entrySet()) {
+                historyTopicsList.addView(getView(historyTopicsList, entry.getValue(), entry.getKey()));
+            }
         }
     }
 
@@ -55,8 +59,8 @@ public class SavedDiscussionFragment extends Fragment {
         TextView startTime = (TextView) inflate.findViewById(R.id.textViewVersion);
         TextView endTime = (TextView) inflate.findViewById(R.id.endTime);
 
-        Date sDate =new Date(d.getStartTime());
-        Date eDate =new Date(d.getEndTime());
+        Date sDate = new Date(d.getStartTime());
+        Date eDate = new Date(d.getEndTime());
         SimpleDateFormat sdf=new SimpleDateFormat("hh:mm a");
         String sTime = "Start Time :"+ sdf.format(sDate);
         String eTime = "End Time :"+sdf.format(eDate);
@@ -76,14 +80,14 @@ public class SavedDiscussionFragment extends Fragment {
             public void onClick(View view) {
                 Log.d(TAG,view.getTag().toString());
                 System.out.println(view.getTag().toString());
-//                Discussion d = discussions.get(view.getTag().toString());
-//                Intent i = new Intent(getActivity(), ChatActivity.class);
-//                Bundle b = new Bundle();
-//                b.putSerializable("discussion", d);
-//                i.putExtra("discussionKey", view.getTag().toString());
-//                i.putExtra("discussionName", d.getTopic());
-//                i.putExtras(b);
-//                startActivity(i);
+                Discussion d = discussions.get(view.getTag().toString());
+                Intent i = new Intent(getActivity(), HistoryChatActivity.class);
+                Bundle b = new Bundle();
+                b.putSerializable("discussion", d);
+                i.putExtra("discussionKey", view.getTag().toString());
+                i.putExtra("discussionName", d.getTopic());
+                i.putExtras(b);
+                startActivity(i);
             }
         };
     }

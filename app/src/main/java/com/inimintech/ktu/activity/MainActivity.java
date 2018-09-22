@@ -9,7 +9,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.inimintech.ktu.R;
-import com.inimintech.ktu.fragments.ChatFragment;
+import com.inimintech.ktu.fragments.TopicListFragment;
 
 /*
 * @author      Bathire Nathan
@@ -29,13 +29,13 @@ public class MainActivity extends AppCompatActivity {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    transaction.replace(R.id.container_main, ChatFragment.newInstance());
+                    transaction.replace(R.id.container_main, TopicListFragment.newInstance());
                     break;
                 case R.id.navigation_dashboard:
-                    transaction.replace(R.id.container_main, ChatFragment.newInstance());
+                    transaction.replace(R.id.container_main, TopicListFragment.newInstance());
                     break;
                 case R.id.navigation_notifications:
-                    transaction.replace(R.id.container_main, ChatFragment.newInstance());
+                    transaction.replace(R.id.container_main, TopicListFragment.newInstance());
                     break;
             }
             transaction.commit();
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private void setDefaultTransaction(BottomNavigationView navigation, int menuIndex) {
         navigation.getMenu().getItem(menuIndex).setChecked(true);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.container_main, ChatFragment.newInstance());
+        transaction.replace(R.id.container_main, TopicListFragment.newInstance());
         transaction.commit();
     }
 

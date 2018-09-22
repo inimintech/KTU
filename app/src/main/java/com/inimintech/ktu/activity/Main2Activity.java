@@ -12,7 +12,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.inimintech.ktu.R;
-import com.inimintech.ktu.fragments.ChatFragment;
+import com.inimintech.ktu.fragments.TopicListFragment;
 import com.inimintech.ktu.fragments.ListContentFragment;
 import com.inimintech.ktu.fragments.SavedDiscussionFragment;
 
@@ -35,7 +35,7 @@ public class Main2Activity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
-        adapter.addFragment(new ChatFragment(), "Discussions");
+        adapter.addFragment(new TopicListFragment(), "Discussions");
         adapter.addFragment(new ListContentFragment(), "Admin");
         adapter.addFragment(new SavedDiscussionFragment(), "Saved Discussions");
 

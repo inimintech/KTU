@@ -35,19 +35,19 @@ import static com.inimintech.ktu.services.FirestoreServices.discussionCategory;
  * @Created on  11 Aug 2018
  */
 
-public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class TopicListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     SwipeRefreshLayout swipeLayout;
 
-    private static final String TAG = ChatFragment.class.getName();
+    private static final String TAG = TopicListFragment.class.getName();
     private LinearLayout topicsList, categories;
     private Map<String, Discussion> discussions;
 
 
-    public ChatFragment() {
+    public TopicListFragment() {
     }
 
-    public static ChatFragment newInstance() {
-        ChatFragment fragment = new ChatFragment();
+    public static TopicListFragment newInstance() {
+        TopicListFragment fragment = new TopicListFragment();
         return fragment;
     }
 
@@ -192,4 +192,18 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public void onRefresh() {
         loadTopics();
     }
+
+//    public List<Chat> getLocalmChat(String id){
+//        Gson gson = new Gson();
+//        // do the reverse operation
+//        SharedPreferences sharedPreferences = PreferenceManager
+//                .getDefaultSharedPreferences(getContext());
+//        String mchat_json = sharedPreferences.getString(id, "");
+//        List<Chat> chatList = gson.fromJson(mchat_json,new TypeToken<ArrayList<Chat>>(){}.getType());
+//        for(Chat chat : chatList){
+//            Log.d(TAG,chat.toString());
+//        }
+//        Log.d(TAG,"List chat: "+chatList.toString());
+//        return chatList;
+//    }
 }
