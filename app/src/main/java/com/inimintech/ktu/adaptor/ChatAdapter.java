@@ -96,6 +96,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         DateFormat time = new SimpleDateFormat("hh:mm a");
         textView1.setText(String.valueOf(time.format(new Date(chat.getSentTime()))));
         if(viewHolder.getItemViewType() == VIEW_TYPE_MESSAGE_RECEIVED){
+            TextView userKey = viewHolder.userKey;
+            userKey.setText(chat.getUserKey() != null ? chat.getUserKey() : "-");
             final Button likeBtn = viewHolder.likeBtn;
             final AlphaAnimation alhpaAnim = new AlphaAnimation(1F, 0.8F);
             likeBtn.setOnClickListener(new View.OnClickListener() {
@@ -127,6 +129,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
         public TextView msg;
         public TextView msgTime;
+        public TextView userKey;
         public Button likeBtn;
 
         public ViewHolder(View itemView) {
@@ -134,7 +137,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
             msg = (TextView) itemView.findViewById(R.id.text_message_body);
             msgTime = (TextView) itemView.findViewById(R.id.text_message_time);
+            userKey = (TextView) itemView.findViewById(R.id.rec_id);
             likeBtn = (Button) itemView.findViewById(R.id.likeMsg);
+
 
         }
 

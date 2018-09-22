@@ -46,27 +46,10 @@ public class FirestoreServices {
             .collection(CollectionsEnum.Category.toString())
             .document(Documents.categories.toString());
 
+    public static final CollectionReference topicCollection = ourdb.
+            collection(CollectionsEnum.Discussions.toString());
 
-
-    static {
-
+    public static DocumentReference docRefForDiscussion(String documentKey){
+        return topicCollection.document(documentKey);
     }
-
-
-    public static void insertData(String collection, Chat chat) {
-        ourdb.collection(collection)
-                .add(chat)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        //Log.d(TAG,"DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                });
-    }
-
-    public static CollectionReference getTopicCollection(){
-        return ourdb.collection("Discussions");
-    }
-
-
 }

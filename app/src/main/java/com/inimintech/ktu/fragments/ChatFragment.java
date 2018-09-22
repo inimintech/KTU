@@ -124,7 +124,7 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         long val = new Date().getTime();
         Log.d(TAG, String.valueOf(val));
         discussions = new HashMap<>();
-        FirestoreServices.ourdb.collection("Discussions")
+        FirestoreServices.topicCollection
                 .whereGreaterThan("endTime", new Date().getTime())
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override

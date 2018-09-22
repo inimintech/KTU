@@ -54,7 +54,7 @@ public class ListContentFragment extends Fragment{
                 Discussion d = new Discussion(stopic, start.getTime(), end.getTime());
                 Log.d(ListContentFragment.class.getName(), d.toString());
                 if(start != null && end != null & !TextUtils.isEmpty(stopic)){
-                    FirestoreServices.getTopicCollection().document(stopic)
+                    FirestoreServices.topicCollection.document(stopic)
                             .set(d).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {

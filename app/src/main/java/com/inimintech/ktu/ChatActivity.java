@@ -3,26 +3,35 @@ package com.inimintech.ktu;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.inimintech.ktu.activity.Main2Activity;
 import com.inimintech.ktu.adaptor.ChatAdapter;
 import com.inimintech.ktu.data.Chat;
 import com.inimintech.ktu.data.Discussion;
 import com.inimintech.ktu.helper.ChatActivityHelper;
 import com.inimintech.ktu.services.AuthServices;
+import com.inimintech.ktu.services.FirestoreServices;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -41,16 +50,9 @@ public class ChatActivity extends AppCompatActivity {
     private Chat chat;
     private ChatActivityHelper chatActivityHelper;
     private Discussion d;
+    private String userKey;
 
     private CountDownTimer cTimer = null;
-    private Runnable Timer_Tick = new Runnable() {
-        public void run() {
-            Toast.makeText(getApplicationContext(), "Discussion time is over", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +67,9 @@ public class ChatActivity extends AppCompatActivity {
             chatActivityHelper = ChatActivityHelper.INSTANCE;
         else
             chatActivityHelper = ChatActivityHelper.getInstance(key);
+
         initializeActivity();
+        checkAndUpdateId();
         setAdapterAndView();
     }
 
@@ -77,8 +81,15 @@ public class ChatActivity extends AppCompatActivity {
             rvChats.smoothScrollToPosition(adapter.getItemCount() - 1);
         }
         long currentTime = new Date().getTime();
-        startScheduler(currentTime);
-        startTimer(d.getEndTime() - currentTime);
+        /*startScheduler(currentTime);*/
+        if(d.getEndTime() > currentTime)
+            startTimer(d.getEndTime() - currentTime);
+        else{
+            Intent i = new Intent(this, Main2Activity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+        }
+
     }
 
     private void setAdapterAndView() {
@@ -91,24 +102,6 @@ public class ChatActivity extends AppCompatActivity {
         initializeClickEvents();
         chatActivityHelper.startListener();
     }
-
-    private void startScheduler(long currentTime) {
-        if(d.getEndTime() > currentTime) {
-            new Timer().schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    timerMethod();
-                }
-            }, new Date(d.getEndTime()));
-        }else{
-            Intent i = new Intent(this, Main2Activity.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(i);
-        }
-    }
-
-    private void timerMethod() {
-        this.runOnUiThread(Timer_Tick);   }
 
     @Override
     protected void onResume() {
@@ -146,7 +139,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(!TextUtils.isEmpty(msg.getText())){
-                    chat = new Chat(AuthServices.UID,
+                    chat = new Chat(userKey, AuthServices.UID,
                             msg.getText().toString(), new Date().getTime());
                     chatActivityHelper.saveToDB(chat);
                     msg.setText("");
@@ -180,9 +173,71 @@ public class ChatActivity extends AppCompatActivity {
                 timer.setText(rem);
             }
             public void onFinish() {
+                Toast.makeText(getApplicationContext(), "Discussion time is over", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         };
         cTimer.start();
     }
 
+    private void checkAndUpdateId() {
+        if(d.getLoggedInusers() != null && d.getLoggedInusers().containsKey(AuthServices.UID)) {
+            userKey = d.getLoggedInusers().get(AuthServices.UID);
+            return;
+        }
+
+        final DocumentReference ref = FirestoreServices.docRefForDiscussion(d.getTopic());
+        ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    Discussion d = task.getResult().toObject(Discussion.class);
+                    if (d.getLoggedInusers() != null){
+                        int i = d.getLoggedInusers().keySet().size();
+                        i = i+1;
+                        userKey = String.valueOf(i);
+                    }else{
+                        d.setLoggedInusers(new HashMap<String, String>());
+                        userKey = String.valueOf(1);
+                    }
+                    d.getLoggedInusers().put(AuthServices.UID, userKey);
+                    ref.set(d, SetOptions.merge());
+                }
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.chat_options, menu);
+        return true;
+    }
+
 }
+ /* private void startScheduler(long currentTime) {
+        if(d.getEndTime() > currentTime) {
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    timerMethod();
+                }
+            }, new Date(d.getEndTime()));
+        }else{
+            Intent i = new Intent(this, Main2Activity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+        }
+    } private void timerMethod() {
+        this.runOnUiThread(Timer_Tick);   }
+
+    private Runnable Timer_Tick = new Runnable() {
+        public void run() {
+            Toast.makeText(getApplicationContext(), "Discussion time is over", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
+    };*/

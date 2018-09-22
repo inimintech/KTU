@@ -11,12 +11,14 @@ import java.util.List;
  */
 public class Chat {
 
+    private String userKey;
     private String userId;
     private String message;
     private Long sentTime;
     private List<String> ratedUsers;
 
-    public Chat(String userId, String message, Long sentTime) {
+    public Chat(String userKey, String userId, String message, Long sentTime) {
+        this.userKey = userKey;
         this.userId = userId;
         this.message = message;
         this.sentTime = sentTime;
@@ -24,6 +26,10 @@ public class Chat {
 
     public Chat() {
     }
+
+    public String getUserKey() { return userKey; }
+
+    public void setUserKey(String userKey) { this.userKey = userKey; }
 
     public String getUserId() {
         return userId;
