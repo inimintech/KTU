@@ -40,11 +40,10 @@ public class SavedDiscussionFragment extends Fragment {
         return rootView;
     }
     private void loadhistoryTopics(){
-        LocalSaveServices localserv = new LocalSaveServices();
         historyTopicsList.removeAllViews();
-        Map<String,Discussion> TopicList = localserv.getLocalTopicList(getContext());
-        if(TopicList != null){
-            for (Map.Entry<String,Discussion> entry : TopicList.entrySet()) {
+        discussions = LocalSaveServices.INSTANCES.getLocalTopicList(getContext());
+        if(discussions != null){
+            for (Map.Entry<String,Discussion> entry : discussions.entrySet()) {
                 historyTopicsList.addView(getView(historyTopicsList, entry.getValue(), entry.getKey()));
             }
         }
@@ -84,8 +83,6 @@ public class SavedDiscussionFragment extends Fragment {
                 Intent i = new Intent(getActivity(), HistoryChatActivity.class);
                 Bundle b = new Bundle();
                 b.putSerializable("discussion", d);
-                i.putExtra("discussionKey", view.getTag().toString());
-                i.putExtra("discussionName", d.getTopic());
                 i.putExtras(b);
                 startActivity(i);
             }

@@ -3,6 +3,7 @@ package com.inimintech.ktu.services;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -19,6 +20,12 @@ import static com.inimintech.ktu.ChatActivity.adapter;
 
 public class LocalSaveServices {
     private static final String TAG = "Shared Pref";
+
+    public static final  LocalSaveServices INSTANCES = getInstance();
+
+    private static LocalSaveServices getInstance(){
+        return new LocalSaveServices();
+    }
 
     public void saveLocalString(String ID, String Data,Context activity) {
         SharedPreferences sharedPreferences = PreferenceManager
@@ -41,16 +48,21 @@ public class LocalSaveServices {
         return Data;
     }
 
-    public void saveLocalTopiclist(String id, Discussion diss, Context activity){
+    public void saveLocalDiscussion(List<Chat> mChats,Discussion d, Context activity){
+        saveLocalTopicList(d,activity);
+        saveLocalmChat(d, mChats, activity);
+    }
+
+    private void saveLocalTopicList(Discussion diss, Context activity){
         String listID="Topics";
         Map<String, Discussion> TopicList = new HashMap<>();
         Gson gson = new Gson();
         String stringTopicsMap = getLocalString(listID,activity);
-        if(stringTopicsMap != null) {
+        if(!TextUtils.isEmpty(stringTopicsMap)) {
                 TopicList = gson.fromJson(stringTopicsMap, new TypeToken<Map<String, Discussion>>() {
             }.getType());
         }
-        TopicList.put(id, diss);
+        TopicList.put(diss.getDiscussionId(), diss);
         stringTopicsMap = gson.toJson(TopicList);
         saveLocalString(listID,stringTopicsMap,activity);
     }
@@ -65,10 +77,10 @@ public class LocalSaveServices {
         return TopicList;
     }
 
-    public void saveLocalmChat(String id, Context activity){
+    private void saveLocalmChat(Discussion diss,List<Chat> mChats, Context activity){
         Gson gson = new Gson();
-        String mchatJson = gson.toJson(adapter.getmChats());
-        saveLocalString(id,mchatJson,activity);
+        String mchatJson = gson.toJson(mChats);
+        saveLocalString(diss.getDiscussionId(),mchatJson,activity);
     }
 
     public List<Chat> getLocalmChat(String id,Context activity){

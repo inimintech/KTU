@@ -51,9 +51,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <!-- <activity android:name=".activity.MailSignInActivity"></activity> -->
         <activity
-            android:name=".HistoryChatActivity"
-            android:label="@string/title_activity_history_chat"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:name=".HistoryChatActivity"/>
     </application>
 
 </manifest>

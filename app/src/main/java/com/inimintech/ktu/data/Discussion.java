@@ -57,6 +57,8 @@ public class Discussion implements Serializable{
 
     public void setLoggedInusers(Map<String, String> loggedInusers) {     this.loggedInusers = loggedInusers;   }
 
+    public String getDiscussionId(){ return this.topic+"_"+String.valueOf(startTime); }
+
     @Override
     public String toString() {
         return "Discussion{" +

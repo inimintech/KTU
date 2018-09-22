@@ -35,8 +35,9 @@ import static com.inimintech.ktu.services.FirestoreServices.discussionCategory;
  * @Created on  11 Aug 2018
  */
 
-public class TopicListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-    SwipeRefreshLayout swipeLayout;
+public class TopicListFragment extends Fragment{
+        //implements SwipeRefreshLayout.OnRefreshListener {
+   // SwipeRefreshLayout swipeLayout;
 
     private static final String TAG = TopicListFragment.class.getName();
     private LinearLayout topicsList, categories;
@@ -64,14 +65,14 @@ public class TopicListFragment extends Fragment implements SwipeRefreshLayout.On
         topicsList = root.findViewById(R.id.topicsList);
         categories = root.findViewById(R.id.cartegory);
 
-        swipeLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipe_container);
+        /*swipeLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipe_container);
         swipeLayout.setOnRefreshListener(this);
         swipeLayout.setColorSchemeColors(android.R.color.holo_green_dark,
                 android.R.color.holo_red_dark,
                 android.R.color.holo_blue_dark,
                 android.R.color.holo_orange_dark);
 
-        swipeLayout.setRefreshing(true);
+        swipeLayout.setRefreshing(true);*/
 
         loadCategories();
         loadTopics();
@@ -136,7 +137,7 @@ public class TopicListFragment extends Fragment implements SwipeRefreshLayout.On
                         topicsList.addView(getView(topicsList, d, document.getId()));
                         Log.d(TAG, document.getId() + " => " + document.getData());
                     }
-                    swipeLayout.setRefreshing(false);
+                    //swipeLayout.setRefreshing(false);
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }
@@ -188,10 +189,10 @@ public class TopicListFragment extends Fragment implements SwipeRefreshLayout.On
     }
 
 
-    @Override
+   /* @Override
     public void onRefresh() {
         loadTopics();
-    }
+    }*/
 
 //    public List<Chat> getLocalmChat(String id){
 //        Gson gson = new Gson();

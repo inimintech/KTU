@@ -126,6 +126,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         return mChats;
     }
 
+    public void setmChats(List<Chat> mChats) {
+        this.mChats = mChats;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView msg;

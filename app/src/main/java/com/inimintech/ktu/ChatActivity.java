@@ -29,6 +29,7 @@ import com.inimintech.ktu.data.Discussion;
 import com.inimintech.ktu.helper.ChatActivityHelper;
 import com.inimintech.ktu.services.AuthServices;
 import com.inimintech.ktu.services.FirestoreServices;
+import com.inimintech.ktu.services.LocalSaveServices;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -85,6 +86,7 @@ public class ChatActivity extends AppCompatActivity {
         if(d.getEndTime() > currentTime)
             startTimer(d.getEndTime() - currentTime);
         else{
+            LocalSaveServices.INSTANCES.saveLocalDiscussion(adapter.getmChats(),d,this);
             Intent i = new Intent(this, Main2Activity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
@@ -173,6 +175,7 @@ public class ChatActivity extends AppCompatActivity {
                 timer.setText(rem);
             }
             public void onFinish() {
+                LocalSaveServices.INSTANCES.saveLocalDiscussion(adapter.getmChats(),d,getApplicationContext());
                 Toast.makeText(getApplicationContext(), "Discussion time is over", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
