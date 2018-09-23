@@ -3,7 +3,6 @@ package com.inimintech.ktu;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,10 +16,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.SetOptions;
 import com.inimintech.ktu.activity.Main2Activity;
 import com.inimintech.ktu.adaptor.ChatAdapter;
@@ -31,10 +29,10 @@ import com.inimintech.ktu.services.AuthServices;
 import com.inimintech.ktu.services.FirestoreServices;
 import com.inimintech.ktu.services.LocalSaveServices;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
+
+import javax.annotation.Nullable;
 
 /*
  * @author      Bathire Nathan
@@ -51,7 +49,6 @@ public class ChatActivity extends AppCompatActivity {
     private Chat chat;
     private ChatActivityHelper chatActivityHelper;
     private Discussion d;
-    private String userKey;
 
     private CountDownTimer cTimer = null;
 
@@ -70,7 +67,8 @@ public class ChatActivity extends AppCompatActivity {
             chatActivityHelper = ChatActivityHelper.getInstance(key);
 
         initializeActivity();
-        checkAndUpdateId();
+        updateDiscussionObject();
+        insertUserOnDiscussion();
         setAdapterAndView();
     }
 
@@ -141,6 +139,10 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(!TextUtils.isEmpty(msg.getText())){
+                    String userKey= "-";
+                    if(d.getLoggedInUsers().contains(AuthServices.UID)){
+                        userKey = String.valueOf(d.getLoggedInUsers().indexOf(AuthServices.UID));
+                    }
                     chat = new Chat(userKey, AuthServices.UID,
                             msg.getText().toString(), new Date().getTime());
                     chatActivityHelper.saveToDB(chat);
@@ -185,31 +187,37 @@ public class ChatActivity extends AppCompatActivity {
         cTimer.start();
     }
 
-    private void checkAndUpdateId() {
-        if(d.getLoggedInusers() != null && d.getLoggedInusers().containsKey(AuthServices.UID)) {
-            userKey = d.getLoggedInusers().get(AuthServices.UID);
-            return;
-        }
+    private void updateDiscussionObject() {
+        FirestoreServices.docRefForDiscussion(d.getTopic())
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "Listen failed.", e);
+                            return;
+                        }
+                        String source = snapshot != null && snapshot.getMetadata().hasPendingWrites()
+                                ? "Local" : "Server";
 
-        final DocumentReference ref = FirestoreServices.docRefForDiscussion(d.getTopic());
-        ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
-                    d = task.getResult().toObject(Discussion.class);
-                    if (d.getLoggedInusers() != null){
-                        int i = d.getLoggedInusers().keySet().size();
-                        i = i+1;
-                        userKey = String.valueOf(i);
-                    }else{
-                        d.setLoggedInusers(new HashMap<String, String>());
-                        userKey = String.valueOf(1);
+                        if (snapshot != null && snapshot.exists()) {
+                            d = snapshot.toObject(Discussion.class);
+                            Log.d(TAG, source + " data: " + snapshot.toObject(Discussion.class));
+                        } else {
+                            Log.d(TAG, source + " data: null");
+                        }
+
                     }
-                    d.getLoggedInusers().put(AuthServices.UID, userKey);
-                    ref.set(d, SetOptions.merge());
-                }
-            }
-        });
+                });
+    }
+
+    private void insertUserOnDiscussion(){
+        if(this.d.getLoggedInUsers() == null) {
+            this.d.setLoggedInUsers(new ArrayList<String>());
+        }
+        Discussion d = this.d ;
+        d.getLoggedInUsers().add(AuthServices.UID);
+        FirestoreServices.docRefForDiscussion(d.getTopic()).set(d, SetOptions.merge());
     }
 
     @Override
