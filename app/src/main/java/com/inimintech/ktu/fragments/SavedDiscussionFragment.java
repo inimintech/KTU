@@ -2,6 +2,7 @@ package com.inimintech.ktu.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -51,12 +54,15 @@ public class SavedDiscussionFragment extends Fragment {
 
     public View getView(ViewGroup parent, Discussion d, String tag){
         LayoutInflater li = LayoutInflater.from(getContext());
-        View inflate = li.inflate(R.layout.item_topics, parent, false);
+        View inflate = li.inflate(R.layout.saved_item_topics, parent, false);
         inflate.setTag(tag);
 
         TextView topicName = (TextView) inflate.findViewById(R.id.textViewName);
         TextView startTime = (TextView) inflate.findViewById(R.id.textViewVersion);
         TextView endTime = (TextView) inflate.findViewById(R.id.endTime);
+        ImageButton button = (ImageButton) inflate.findViewById(R.id.delButton);
+        button.setTag(tag);
+
 
         Date sDate = new Date(d.getStartTime());
         Date eDate = new Date(d.getEndTime());
@@ -69,6 +75,7 @@ public class SavedDiscussionFragment extends Fragment {
         endTime.setText(String.valueOf(eTime));
 
         inflate.setOnClickListener(clickListerner());
+        button.setOnClickListener(delClickListerner());
         return inflate;
     }
 
@@ -85,6 +92,23 @@ public class SavedDiscussionFragment extends Fragment {
                 b.putSerializable("discussion", d);
                 i.putExtras(b);
                 startActivity(i);
+            }
+        };
+    }
+
+    public View.OnClickListener delClickListerner(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG,view.getTag().toString());
+                System.out.println(view.getTag().toString());
+                Discussion d = discussions.get(view.getTag().toString());
+                LocalSaveServices.INSTANCES.deleteLocalDiscussion(d,getContext());
+ //               View rootView = inflater.inflate(R.layout.fragment_saved_discussion, container, false);
+
+                loadhistoryTopics();
+//                return rootView;
+
             }
         };
     }

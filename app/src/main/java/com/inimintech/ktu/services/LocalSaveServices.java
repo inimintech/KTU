@@ -27,20 +27,20 @@ public class LocalSaveServices {
         return new LocalSaveServices();
     }
 
-    public void saveLocalString(String ID, String Data,Context activity) {
+    private void saveLocalString(String id, String Data,Context activity) {
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(activity);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         //String id =  d.getTopic()+"_"+d.getStartTime();
-        Log.d(TAG,"ID: " + ID);
+        Log.d(TAG,"ID: " + id);
         Log.d(TAG,"Data: " + Data);
         // get storage key
-        editor.putString(ID, Data);
+        editor.putString(id, Data);
         editor.commit();
         Log.d(TAG,"Data has been saved");
     }
 
-    public static String getLocalString(String id,Context activity){
+    private static String getLocalString(String id,Context activity){
         // do the reverse operation
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(activity);
@@ -48,12 +48,43 @@ public class LocalSaveServices {
         return Data;
     }
 
+    public static void deleteLocalString(String id, Context activity){
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(id);
+        editor.apply();
+        Log.d(TAG,"Delete the data in following id: "+ id);
+    }
+
+    private void deleteLocalTopicList(Discussion diss, Context activity){
+        String listID="Topics";
+        Map<String, Discussion> TopicList = new HashMap<>();
+        Gson gson = new Gson();
+        String stringTopicsMap = getLocalString(listID,activity);
+        if(!TextUtils.isEmpty(stringTopicsMap)) {
+            TopicList = gson.fromJson(stringTopicsMap, new TypeToken<Map<String, Discussion>>() {
+            }.getType());
+        }
+        TopicList.remove(diss.getDiscussionId());
+        stringTopicsMap = gson.toJson(TopicList);
+        saveLocalString(listID,stringTopicsMap,activity);
+        Log.d(TAG,"ID: " + diss.getDiscussionId());
+        Log.d(TAG,"discussion id is deleted in Local");
+    }
+
+    public void deleteLocalDiscussion(Discussion d, Context activity){
+        deleteLocalString(d.getDiscussionId(), activity);
+        deleteLocalTopicList(d,activity);
+        Log.d(TAG,"Discussion with Topic id is deleted in Local");
+    }
+
     public void saveLocalDiscussion(List<Chat> mChats,Discussion d, Context activity){
         saveLocalTopicList(d,activity);
         saveLocalmChat(d, mChats, activity);
     }
 
-    private void saveLocalTopicList(Discussion diss, Context activity){
+    private void saveLocalTopicList(Discussion d, Context activity){
         String listID="Topics";
         Map<String, Discussion> TopicList = new HashMap<>();
         Gson gson = new Gson();
@@ -62,7 +93,7 @@ public class LocalSaveServices {
                 TopicList = gson.fromJson(stringTopicsMap, new TypeToken<Map<String, Discussion>>() {
             }.getType());
         }
-        TopicList.put(diss.getDiscussionId(), diss);
+        TopicList.put(d.getDiscussionId(), d);
         stringTopicsMap = gson.toJson(TopicList);
         saveLocalString(listID,stringTopicsMap,activity);
     }
@@ -77,10 +108,10 @@ public class LocalSaveServices {
         return TopicList;
     }
 
-    private void saveLocalmChat(Discussion diss,List<Chat> mChats, Context activity){
+    private void saveLocalmChat(Discussion d,List<Chat> mChats, Context activity){
         Gson gson = new Gson();
         String mchatJson = gson.toJson(mChats);
-        saveLocalString(diss.getDiscussionId(),mchatJson,activity);
+        saveLocalString(d.getDiscussionId(),mchatJson,activity);
     }
 
     public List<Chat> getLocalmChat(String id,Context activity){
