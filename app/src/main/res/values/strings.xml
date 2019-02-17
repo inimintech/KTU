@@ -2,12 +2,13 @@
     <string name="app_name">KTU</string>
     <string name="title_activity_signup">SignupActivity</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_discussion">Discussion</string>
+    <string name="title_admin">Admin</string>
+    <string name="title_save_discussion">Saved Discussion</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="default_notification_channel_id">KTU</string>
     <string name="title_activity_history_chat">HistoryChatActivity</string>
+    <string name="title_activity_landing_page">LandingPageActivity</string>
 </resources>

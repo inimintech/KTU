@@ -67,8 +67,8 @@ public class ChatActivity extends AppCompatActivity {
             chatActivityHelper = ChatActivityHelper.getInstance(key);
 
         initializeActivity();
-        updateDiscussionObject();
         insertUserOnDiscussion();
+        updateDiscussionObject();
         setAdapterAndView();
     }
 

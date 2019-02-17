@@ -23,8 +23,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.CollectionReference;
 import com.inimintech.ktu.LoginActivity;
 import com.inimintech.ktu.R;
+import com.inimintech.ktu.services.FirestoreServices;
 
 public class MailSignInActivity extends AppCompatActivity {
 
@@ -134,7 +136,8 @@ public class MailSignInActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         Log.d("UserId", user.getUid());
-        Intent intent = new Intent(MailSignInActivity.this, Main2Activity.class);
+        FirestoreServices.saveUser(user);
+        Intent intent = new Intent(MailSignInActivity.this, LandingPageActivity.class);
         startActivity(intent);
     }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.inimintech.ktu">
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -11,6 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".activity.LandingPageActivity"
+            android:label="@string/title_activity_landing_page"></activity>
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/liked" />
@@ -20,14 +25,11 @@
         -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/colorAccent" />
-        <!-- [END fcm_default_icon] -->
+            android:resource="@color/colorAccent" /> <!-- [END fcm_default_icon] -->
         <!-- [START fcm_default_channel] -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="@string/default_notification_channel_id" />
-        <!-- [END fcm_default_channel] -->
-
+            android:value="@string/default_notification_channel_id" /> <!-- [END fcm_default_channel] -->
         <service android:name=".services.NotificationService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -42,16 +44,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".VerifyPhnoActivity" />
-        <activity android:name=".ChatActivity" />
+        <activity android:name=".ChatActivity"
+            android:theme="@style/AppTheme.AppBarOverlay"/>
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/title_activity_main" />
         <activity
             android:name=".activity.Main2Activity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <!-- <activity android:name=".activity.MailSignInActivity"></activity> -->
-        <activity
-            android:name=".HistoryChatActivity"/>
+            android:theme="@style/AppTheme.NoActionBar" /> <!-- <activity android:name=".activity.MailSignInActivity"></activity> -->
+        <activity android:name=".HistoryChatActivity" />
     </application>
 
 </manifest>

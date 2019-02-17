@@ -11,12 +11,14 @@ public class AuthServices {
 
     public static final AuthServices INSTANCE = new AuthServices();
     private static final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    public static final String UID = INSTANCE.getUid();
+    public static String UID = INSTANCE.getUid();
 
     private AuthServices(){
     }
 
     private String getUid(){
+        if(UID != null)
+            return  UID;
         FirebaseUser user = mAuth.getCurrentUser();
         if(user != null)
             return user.getUid();

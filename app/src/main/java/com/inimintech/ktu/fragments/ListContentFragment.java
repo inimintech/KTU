@@ -1,6 +1,5 @@
 package com.inimintech.ktu.fragments;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -10,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -20,11 +18,9 @@ import com.inimintech.ktu.R;
 import com.inimintech.ktu.data.Discussion;
 import com.inimintech.ktu.services.FirestoreServices;
 
-import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -101,6 +97,5 @@ public class ListContentFragment extends Fragment{
         startTime.setText(mDay+"/"+mMonth+"/"+mYear+" "+mHour+":"+mMinute);
         endTime.setText(mDay+"/"+mMonth+"/"+mYear+" "+mHour+":"+mMinute);
     }
-
 
 }

@@ -32,7 +32,7 @@ public class NotificationService extends FirebaseMessagingService {
 
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-            sendNotification(remoteMessage.getNotification().getBody());
+            sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
         }
     }
 
@@ -40,7 +40,7 @@ public class NotificationService extends FirebaseMessagingService {
     public void onNewToken(String token) {
         Log.d(TAG, "Refreshed token: " + token);
 
-        //sendRegistrationToServer(token);
+        sendRegistrationToServer(token);
     }
 
     private void handleNow() {
@@ -49,11 +49,12 @@ public class NotificationService extends FirebaseMessagingService {
 
     private void sendRegistrationToServer(String token) {
         DocumentReference user = FirestoreServices.CurrentUser;
-        user.update("tokenId", token);
+        if(user != null)
+            user.update("tokenId", token);
     }
 
 
-    private void sendNotification(String messageBody) {
+    private void sendNotification(String title , String messageBody) {
         Intent intent = new Intent(this, Main2Activity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -64,7 +65,7 @@ public class NotificationService extends FirebaseMessagingService {
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(R.drawable.liked)
-                        .setContentTitle("FCM Message")
+                        .setContentTitle(title)
                         .setContentText(messageBody)
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
